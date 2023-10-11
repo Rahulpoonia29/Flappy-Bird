@@ -46,8 +46,6 @@ lst = [
     100,
 ]
 pipes = []
-deviation = random.choice(lst)
-# deviation = -130
 distance_per_frame = 0
 distance = 0
 
@@ -56,8 +54,6 @@ distance = 0
 
 # Instances
 bird = Bird(100, 100, 30, 30)
-pipe_1 = Pipe(800, -150 + deviation, 350, 50)
-pipe_2 = Pipe(800, 350 + deviation, 350, 50)
 
 
 # Functions
@@ -74,10 +70,16 @@ def check_game_over(player):
         player.jump_strength = 0
 
 
-# def obstacles():
-#     if distance_per_frame / 60 == 0:
-#         lenght = len(pipes)
-#         pipe_
+def obstacles():
+    if distance_per_frame == 0:
+        deviation = random.choice(lst)
+        pipes.append(
+            (
+                Pipe(800, -150 + deviation, 350, 50),
+                Pipe(800, -150 + deviation + 350 + 150, 350, 50),
+            )
+        )
+        print(pipes)
 
 
 # Game loop
@@ -99,15 +101,16 @@ while running:
 
     # Update
     bird.s_update(screen)
-    pipe_1.s_update(screen)
-    pipe_2.s_update(screen)
 
+    for i in pipes:
+        i[0].s_update(screen)
+        i[1].s_update(screen)
     check_game_over(bird)
+    obstacles()
+
     distance_per_frame += 1
-    if distance_per_frame == 61:
+    if distance_per_frame == 101:
         distance_per_frame = 0
-        distance += 1
-    print(distance)
 
     # Draw your game objects here
     score = Scorecard(100, 100, screen, str(distance))
